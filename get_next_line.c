@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dabdulla <dabdulla@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dabdulla <dabdulla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:09:55 by dabdulla          #+#    #+#             */
-/*   Updated: 2025/10/29 17:55:16 by dabdulla         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:37 by dabdulla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,32 +78,25 @@ char	*read_loop(int fd, char *file)
 	free(buffer);
 	return (file);
 }
-int	check_fd(int fd,char *file)
-{
-	if(fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
-	{
-		return (0);
-	}
-	return (1);
-}
+
 char	*get_next_line(int fd)
 {
 	static char	*file;
 	char		*tmp;
 	char		*str;
-	int			i;
 
-	i = 0;
-	if (!check_fd(fd, file))
+	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	file = read_loop(fd, file);
-	if (!file || *file == '\0')
+	if (!file)
+		return (NULL);
+	if (*file == '\0')
 		return (free(file), NULL);
 	tmp = ft_substr(file, 0, find_new_line(file));
 	if (!tmp)
 		return (free(file), NULL);
-	i = find_new_line(tmp) - ft_strlen(file);
-	str = ft_substr(file, find_new_line(tmp), i);
+	str = ft_substr(file, find_new_line(tmp), find_new_line(file)
+			- ft_strlen(tmp));
 	free(file);
 	if (!str)
 		return (free(str), free(tmp), NULL);
@@ -116,19 +109,17 @@ char	*get_next_line(int fd)
 }
 
 // #include "get_next_line_utils.c"
-int	main(void)
-{
-	int fd;
-	char *s;
-	int i;
 
-	i = 0;
-	fd = open("test.txt", O_RDONLY);
-	while ((s = get_next_line(fd)) && i < 10)
-	{
-		printf("%s", s);
-		free(s);
-		i++;
-	}
-	close(fd);
-}
+// int	main(void)
+// {
+// 	int fd;
+// 	char *s;
+
+// 	fd = open("test.txt", O_RDONLY);
+// 	while ((s = get_next_line(fd)))
+// 	{
+// 		printf("%s", s);
+// 		free(s);
+// 	}
+// 	close(fd);
+// }
