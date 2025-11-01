@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dabdulla <dabdulla@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dabdulla <dabdulla@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:09:55 by dabdulla          #+#    #+#             */
-/*   Updated: 2025/10/29 22:10:37 by dabdulla         ###   ########.fr       */
+/*   Updated: 2025/11/01 11:51:42 by dabdulla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ char	*get_next_line(int fd)
 	tmp = ft_substr(file, 0, find_new_line(file));
 	if (!tmp)
 		return (free(file), NULL);
-	str = ft_substr(file, find_new_line(tmp), find_new_line(file)
-			- ft_strlen(tmp));
+	str = ft_substr(file, find_new_line(tmp), ft_strlen(file) - ft_strlen(tmp));
 	free(file);
 	if (!str)
 		return (free(str), free(tmp), NULL);
@@ -112,8 +111,8 @@ char	*get_next_line(int fd)
 
 // int	main(void)
 // {
-// 	int fd;
-// 	char *s;
+// 	int		fd;
+// 	char	*s;
 
 // 	fd = open("test.txt", O_RDONLY);
 // 	while ((s = get_next_line(fd)))
@@ -121,5 +120,8 @@ char	*get_next_line(int fd)
 // 		printf("%s", s);
 // 		free(s);
 // 	}
+// 	// fd = open("test.txt", O_RDONLY);
+// 	// printf("%s", s);
+// 	// free(s);
 // 	close(fd);
 // }
