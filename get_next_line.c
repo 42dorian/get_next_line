@@ -6,12 +6,11 @@
 /*   By: dabdulla <dabdulla@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:09:55 by dabdulla          #+#    #+#             */
-/*   Updated: 2025/11/01 11:51:42 by dabdulla         ###   ########.fr       */
+/*   Updated: 2025/11/01 12:11:50 by dabdulla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*join_free(char *s1, char *s2)
 {
@@ -107,7 +106,8 @@ char	*get_next_line(int fd)
 	return (tmp);
 }
 
-// #include "get_next_line_utils.c"
+// # include <fcntl.h>
+// # include <stdio.h>
 
 // int	main(void)
 // {

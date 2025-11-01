@@ -6,14 +6,13 @@
 /*   By: dabdulla <dabdulla@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:09:57 by dabdulla          #+#    #+#             */
-/*   Updated: 2025/11/01 11:53:05 by dabdulla         ###   ########.fr       */
+/*   Updated: 2025/11/01 11:58:11 by dabdulla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 
