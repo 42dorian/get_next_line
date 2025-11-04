@@ -6,7 +6,7 @@
 /*   By: dabdulla <dabdulla@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:09:55 by dabdulla          #+#    #+#             */
-/*   Updated: 2025/11/01 12:11:50 by dabdulla         ###   ########.fr       */
+/*   Updated: 2025/11/04 13:26:50 by dabdulla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	is_newline(char *s)
 	int	i;
 
 	i = 0;
+	if (!s)
+		return (1);
 	while (s[i])
 	{
 		if (s[i] == '\n')
@@ -57,25 +59,26 @@ char	*read_loop(int fd, char *file)
 	char	*buffer;
 	int		r;
 
+	buffer = malloc(BUFFER_SIZE + 1);
+	if (!buffer)
+		return (free_and_null(&file), NULL);
 	if (!file)
 	{
 		file = malloc(1);
 		if (!file)
-			return (NULL);
+			return (free_and_null(&buffer), NULL);
 		file[0] = '\0';
 	}
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (free(file), NULL);
 	r = 1;
 	while (r > 0 && !is_newline(file))
 	{
 		r = read(fd, buffer, BUFFER_SIZE);
+		if (r == 0)
+			break ;
 		buffer[r] = '\0';
 		file = join_free(file, buffer);
 	}
-	free(buffer);
-	return (file);
+	return (free_and_null(&buffer), file);
 }
 
 char	*get_next_line(int fd)
@@ -84,44 +87,45 @@ char	*get_next_line(int fd)
 	char		*tmp;
 	char		*str;
 
-	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
 	file = read_loop(fd, file);
 	if (!file)
 		return (NULL);
 	if (*file == '\0')
-		return (free(file), NULL);
+		return (free_and_null(&file));
 	tmp = ft_substr(file, 0, find_new_line(file));
 	if (!tmp)
-		return (free(file), NULL);
+		return (free_and_null(&file));
 	str = ft_substr(file, find_new_line(tmp), ft_strlen(file) - ft_strlen(tmp));
-	free(file);
+	free_and_null(&file);
 	if (!str)
-		return (free(str), free(tmp), NULL);
-	file = NULL;
+		return (free_and_null(&tmp));
 	file = ft_strdup(str);
-	free(str);
+	free_and_null(&str);
 	if (!file)
-		return (free(file), free(tmp), NULL);
+		return (free_and_null(&file), free_and_null(&tmp));
 	return (tmp);
 }
 
-// # include <fcntl.h>
-// # include <stdio.h>
+// #include <fcntl.h>
+// #include <stdio.h>
+
+// # include "get_next_line.h"
 
 // int	main(void)
 // {
-// 	int		fd;
-// 	char	*s;
+// 	int fd;
+// 	char *s;
 
-// 	fd = open("test.txt", O_RDONLY);
+// 	fd = open("", O_RDONLY);
 // 	while ((s = get_next_line(fd)))
 // 	{
 // 		printf("%s", s);
-// 		free(s);
+// 		free_and_null(&s);
 // 	}
 // 	// fd = open("test.txt", O_RDONLY);
 // 	// printf("%s", s);
-// 	// free(s);
+// 	// free_and_null(&s);
 // 	close(fd);
 // }
