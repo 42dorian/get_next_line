@@ -6,7 +6,7 @@
 /*   By: dabdulla <dabdulla@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:09:55 by dabdulla          #+#    #+#             */
-/*   Updated: 2025/11/04 13:26:50 by dabdulla         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:38:59 by dabdulla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,19 @@ char	*read_loop(int fd, char *file)
 
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return (free_and_null(&file), NULL);
+		return (free_and_null(&file));
 	if (!file)
 	{
 		file = malloc(1);
 		if (!file)
-			return (free_and_null(&buffer), NULL);
+			return (free_and_null(&buffer));
 		file[0] = '\0';
 	}
 	r = 1;
 	while (r > 0 && !is_newline(file))
 	{
 		r = read(fd, buffer, BUFFER_SIZE);
-		if (r == 0)
+		if (r <= 0)
 			break ;
 		buffer[r] = '\0';
 		file = join_free(file, buffer);
@@ -87,8 +87,8 @@ char	*get_next_line(int fd)
 	char		*tmp;
 	char		*str;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (NULL);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (free_and_null(&file));
 	file = read_loop(fd, file);
 	if (!file)
 		return (NULL);
@@ -108,24 +108,23 @@ char	*get_next_line(int fd)
 	return (tmp);
 }
 
-// #include <fcntl.h>
-// #include <stdio.h>
+// #include "get_next_line_utils.c"
+#include <fcntl.h>
+#include <stdio.h>
 
-// # include "get_next_line.h"
+int	main(void)
+{
+	int fd;
+	char *s;
 
-// int	main(void)
-// {
-// 	int fd;
-// 	char *s;
-
-// 	fd = open("", O_RDONLY);
-// 	while ((s = get_next_line(fd)))
-// 	{
-// 		printf("%s", s);
-// 		free_and_null(&s);
-// 	}
-// 	// fd = open("test.txt", O_RDONLY);
-// 	// printf("%s", s);
-// 	// free_and_null(&s);
-// 	close(fd);
-// }
+	fd = open("test.txt", O_RDONLY);
+	while ((s = get_next_line(fd)))
+	{
+		printf("%s", s);
+		free_and_null(&s);
+	}
+	s = get_next_line(fd);
+	printf("%s", s);
+	free_and_null(&s);
+	close(fd);
+}
